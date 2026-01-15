@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Жемчужина{% endblock %}</title>
+
+  <!-- Fonts (Cyrillic) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'Segoe UI', 'Roboto', 'Arial', 'sans-serif'],
+            display: ['Manrope', 'Inter', 'system-ui', 'sans-serif'],
+            nav: ['Manrope', 'Inter', 'system-ui', 'sans-serif'],
+          },
+          colors: { brand: { 50:'#E0F2FE', 500:'#0EA5E9', 600:'#0284C7' } },
+          boxShadow: { soft: '0 10px 30px rgba(15, 23, 42, 0.08)' }
+        }
+      }
+    }
+  </script>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+
+  {% block head %}{% endblock %}
+</head>
+
+<body class="bg-slate-50 text-slate-900 font-sans">
+  {% block body %}{% endblock %}
+
+  {% block scripts %}{% endblock %}
+</body>
+</html>

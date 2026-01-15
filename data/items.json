@@ -1,0 +1,62 @@
+{
+  "houses": [
+    {
+      "id": "h293c5b1e1faf",
+      "name": "Тест 2",
+      "price": 2000,
+      "status": "active",
+      "beds": 56,
+      "wc": true,
+      "kitchen": true,
+      "image": "placeholder"
+    },
+    {
+      "id": "h3062b08342a4",
+      "name": "Тест 1",
+      "price": 1000,
+      "status": "active",
+      "beds": 2,
+      "wc": true,
+      "kitchen": true,
+      "image": "placeholder"
+    }
+  ],
+  "gazebos": [
+    {
+      "id": "g1",
+      "name": "Малая беседка",
+      "price": 1500,
+      "status": "active",
+      "gazType": "small",
+      "capacity": 6,
+      "image": "placeholder"
+    },
+    {
+      "id": "g2",
+      "name": "Общая беседка",
+      "price": 2200,
+      "status": "active",
+      "gazType": "common",
+      "capacity": 15,
+      "image": "placeholder"
+    },
+    {
+      "id": "g3",
+      "name": "Купольная беседка",
+      "price": 2500,
+      "status": "active",
+      "gazType": "dome",
+      "capacity": 10,
+      "image": "placeholder"
+    },
+    {
+      "id": "g4",
+      "name": "Банкетная беседка",
+      "price": 5000,
+      "status": "hidden",
+      "gazType": "banquet",
+      "capacity": 20,
+      "image": "placeholder"
+    }
+  ]
+}

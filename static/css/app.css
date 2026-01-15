@@ -1,0 +1,8 @@
+:root { color-scheme: light; }
+
+.ph{
+  background:
+    radial-gradient(80% 80% at 20% 20%, rgba(2,132,199,.18) 0%, rgba(2,132,199,0) 55%),
+    radial-gradient(70% 70% at 80% 30%, rgba(15,23,42,.12) 0%, rgba(15,23,42,0) 55%),
+    linear-gradient(135deg, #eef2f7, #f8fafc);
+}
