@@ -1,62 +1,45 @@
 {
   "houses": [
     {
-      "id": "h293c5b1e1faf",
-      "name": "Тест 2",
-      "price": 2000,
+      "id": "h275e20622bcc",
+      "name": "Тест беседка 2",
+      "price": 4500,
       "status": "active",
-      "beds": 56,
+      "beds": 4,
       "wc": true,
       "kitchen": true,
-      "image": "placeholder"
+      "image": "/static/uploads/houses/h275e20622bcc.jpg"
     },
     {
-      "id": "h3062b08342a4",
-      "name": "Тест 1",
-      "price": 1000,
+      "id": "ha9a82d23c87a",
+      "name": "Тест 2",
+      "price": 2700,
       "status": "active",
-      "beds": 2,
+      "beds": 6,
       "wc": true,
       "kitchen": true,
-      "image": "placeholder"
+      "image": "/static/uploads/houses/ha9a82d23c87a.jpg"
+    },
+    {
+      "id": "hb6331818f363",
+      "name": "Тест",
+      "price": 2400,
+      "status": "active",
+      "beds": 4,
+      "wc": true,
+      "kitchen": true,
+      "image": "/static/uploads/houses/hb6331818f363.jpg"
     }
   ],
   "gazebos": [
     {
-      "id": "g1",
-      "name": "Малая беседка",
-      "price": 1500,
-      "status": "active",
-      "gazType": "small",
-      "capacity": 6,
-      "image": "placeholder"
-    },
-    {
-      "id": "g2",
-      "name": "Общая беседка",
-      "price": 2200,
-      "status": "active",
-      "gazType": "common",
-      "capacity": 15,
-      "image": "placeholder"
-    },
-    {
-      "id": "g3",
-      "name": "Купольная беседка",
-      "price": 2500,
+      "id": "g1e79c83a09ce",
+      "name": "Тест беседка",
+      "price": 500,
       "status": "active",
       "gazType": "dome",
       "capacity": 10,
-      "image": "placeholder"
-    },
-    {
-      "id": "g4",
-      "name": "Банкетная беседка",
-      "price": 5000,
-      "status": "hidden",
-      "gazType": "banquet",
-      "capacity": 20,
-      "image": "placeholder"
+      "image": "/static/uploads/gazebos/g1e79c83a09ce.jpg"
     }
   ]
 }

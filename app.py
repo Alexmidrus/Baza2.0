@@ -20,9 +20,15 @@ from flask import (
     url_for,
 )
 
+from werkzeug.utils import secure_filename
+
 BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR / "data"
 DATA_FILE = DATA_DIR / "items.json"
+
+# Uploads
+UPLOAD_DIR = BASE_DIR / "static" / "uploads"
+ALLOWED_EXT = {"jpg", "jpeg", "png", "webp"}
 
 ADMIN_USERNAME = os.environ.get("ADMIN_USERNAME", "admin")
 ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "admin")  # поменяйте в env
@@ -50,6 +56,37 @@ def save_data(data: Dict[str, Any]) -> None:
 
 def new_id(prefix: str) -> str:
     return f"{prefix}{secrets.token_hex(6)}"
+
+
+def allowed_image(filename: str) -> bool:
+    if not filename or "." not in filename:
+        return False
+    ext = filename.rsplit(".", 1)[1].lower()
+    return ext in ALLOWED_EXT
+
+
+def upload_subdir(item_type: str) -> Path:
+    sub = "houses" if item_type == "houses" else "gazebos"
+    p = UPLOAD_DIR / sub
+    p.mkdir(parents=True, exist_ok=True)
+    return p
+
+
+def delete_item_image_if_exists(item: Dict[str, Any]) -> None:
+    """Delete linked image file from disk if it is under /static/uploads."""
+    img = item.get("image")
+    if not img or not isinstance(img, str):
+        return
+    # Only allow deleting within our static dir
+    if not img.startswith("/static/uploads/"):
+        return
+    file_path = BASE_DIR / img.lstrip("/")
+    try:
+        if file_path.exists() and file_path.is_file():
+            file_path.unlink()
+    except Exception:
+        # In production, log this.
+        pass
 
 
 # ---------- Auth ----------
@@ -211,6 +248,54 @@ def api_update_item(item_id: str):
     return jsonify({"ok": True, "item": current})
 
 
+@app.post("/api/admin/items/<item_id>/image")
+@login_required
+def api_upload_item_image(item_id: str):
+    """Upload/replace image for a конкретной записи.
+
+    Form-data:
+      - type: houses|gazebos
+      - image: file
+    """
+    item_type = _validate_type(request.form.get("type", "houses"))
+
+    if "image" not in request.files:
+        abort(400, description="No file field 'image'")
+
+    file = request.files["image"]
+    if not file or not file.filename:
+        abort(400, description="Empty filename")
+
+    filename = secure_filename(file.filename)
+    if not allowed_image(filename):
+        abort(400, description="Unsupported file type")
+
+    data = load_data()
+    items: List[Dict[str, Any]] = data.get(item_type, [])
+    idx = next((i for i, x in enumerate(items) if x.get("id") == item_id), None)
+    if idx is None:
+        abort(404, description="Not found")
+
+    item = items[idx]
+
+    # Remove old image if exists
+    delete_item_image_if_exists(item)
+
+    ext = filename.rsplit(".", 1)[1].lower()
+    dst_dir = upload_subdir(item_type)
+    dst_name = f"{item_id}.{ext}"
+    dst_path = dst_dir / dst_name
+    file.save(dst_path)
+
+    rel_url = f"/static/uploads/{'houses' if item_type == 'houses' else 'gazebos'}/{dst_name}"
+    item["image"] = rel_url
+    items[idx] = item
+    data[item_type] = items
+    save_data(data)
+
+    return jsonify({"ok": True, "image": rel_url, "item": item})
+
+
 @app.delete("/api/admin/items/<item_id>")
 @login_required
 def api_delete_item(item_id: str):
@@ -218,11 +303,15 @@ def api_delete_item(item_id: str):
     data = load_data()
     items: List[Dict[str, Any]] = data.get(item_type, [])
 
-    new_items = [x for x in items if x.get("id") != item_id]
-    if len(new_items) == len(items):
+    idx = next((i for i, x in enumerate(items) if x.get("id") == item_id), None)
+    if idx is None:
         abort(404, description="Not found")
 
-    data[item_type] = new_items
+    # delete linked image from disk
+    delete_item_image_if_exists(items[idx])
+
+    items.pop(idx)
+    data[item_type] = items
     save_data(data)
     return jsonify({"ok": True})
 

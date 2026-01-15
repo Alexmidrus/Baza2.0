@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
 
-  <!-- Tailwind CDN -->
+  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -19,21 +19,49 @@
           fontFamily: {
             sans: ['Inter', 'system-ui', 'Segoe UI', 'Roboto', 'Arial', 'sans-serif'],
             display: ['Manrope', 'Inter', 'system-ui', 'sans-serif'],
-            nav: ['Manrope', 'Inter', 'system-ui', 'sans-serif'],
           },
-          colors: { brand: { 50:'#E0F2FE', 500:'#0EA5E9', 600:'#0284C7' } },
-          boxShadow: { soft: '0 10px 30px rgba(15, 23, 42, 0.08)' }
+          colors: {
+            brand: {
+              50:  '#E0F2FE',
+              500: '#0EA5E9',
+              600: '#0284C7',
+            }
+          },
+          boxShadow: {
+            soft: '0 10px 30px rgba(15, 23, 42, 0.08)',
+          }
         }
       }
     }
   </script>
 
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+  <style>
+    :root { color-scheme: light; }
+    .ph {
+      background: linear-gradient(90deg, rgba(148,163,184,.18), rgba(148,163,184,.08), rgba(148,163,184,.18));
+      background-size: 200% 100%;
+      animation: ph 1.4s ease-in-out infinite;
+    }
+    @keyframes ph { 0% { background-position: 0% 0; } 100% { background-position: 200% 0; } }
+  </style>
 
   {% block head %}{% endblock %}
 </head>
-
 <body class="bg-slate-50 text-slate-900 font-sans">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="mx-auto max-w-6xl px-4 pt-4">
+        <div class="grid gap-2">
+          {% for category, message in messages %}
+            <div class="rounded-2xl border border-gray-200 bg-white px-4 py-3 text-sm text-slate-700">
+              <span class="font-semibold">{{ 'Ошибка' if category=='error' else 'Сообщение' }}:</span> {{ message }}
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+  {% endwith %}
+
   {% block body %}{% endblock %}
 
   {% block scripts %}{% endblock %}
